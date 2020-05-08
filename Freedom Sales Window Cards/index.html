@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html data-sign="OSM">
+  <head>
+    <title>Template title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/minireset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/placeholder-controller.css">
+
+    <style>
+      /* Inputs Order
+      {{show-crop}}
+      {{placeholder-opacity-2}}
+      {{placeholder-image-2}}
+      {{placeholder-toggle-new-2}}
+      {{placeholder-validation}}
+      {{AV_location-single}}
+      {{#collection.AV_images--fswc}}{{/collection.AV_images--fswc}}
+      {{AV_bedroom--fswc}}
+      {{AV_bathroom--fswc}}
+      {{AV_car--fswc}}
+      {{AV_features--fswc}}
+      {{AV_price-points--fswc}}
+      {{AV_personal-data--bidl}}
+      */
+
+      @import url('https://outfit-assets-production.s3.amazonaws.com/fonts/Calibri-Full/stylesheet.css');
+
+      :root {
+        --black: #000;
+        --the-clayfield: {{{account.colors.the-clayfield}}};
+        --aveo-newstead: {{{account.colors.aveo-newstead}}};
+        --aveo-springfield: {{{account.colors.aveo-springfield}}};
+        --aveo-bella-vista: {{{account.colors.aveo-bella-vista}}};
+
+        --dynamic-colour: var(--the-clayfield);   
+      }
+
+      .themeChoice--the-clayfield {
+        --dynamic-colour: var(--the-clayfield);
+      }
+
+      .themeChoice--aveo-carindale {
+        --dynamic-colour: var(--aveo-springfield);
+      }
+
+      .themeChoice--aveo-bella-vista {
+        --dynamic-colour: var(--aveo-bella-vista);
+      }
+
+      .themeChoice--aveo-newstead {
+        --dynamic-colour: var(--aveo-newstead);
+      }
+
+      html {
+        font-family: 'Calibri';
+        font-size: 11pt;
+        color: #000;
+        word-break: break-word;
+      }
+
+      .backgroundImage {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+      }
+
+      .backgroundImage div {
+        width: auto !important;
+        height: auto !important;
+        right: 0;
+        bottom: 0;
+      }
+
+      /* Helper classes */
+      .u-hide { display: none; }
+
+      /* Helper class for fixing Reposition tool bug */
+      .reposition-fix {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;        
+      }
+
+      .reposition-fix div {
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .fit {
+        display: flex;
+        flex-direction: column;
+        padding: 12pt 9pt 24pt;
+      }
+
+      .image__container {
+        display: flex;
+        height: 127pt;
+        margin-left: -3pt;
+      }
+
+      .image {
+        position: relative;
+        flex: 1;
+        margin-left: 3pt;
+      }
+
+      .body {
+        flex: 1;
+        padding: 4pt 19.1pt;
+      }
+
+      .title {
+        margin-bottom: 15.6pt;
+        padding-left: 3pt;
+        font-size: 34.7pt;
+        line-height: 1em;
+      }
+
+      .subtitle {
+        margin-bottom: 14.1pt;
+        padding-left: 4pt;
+        font-size: 21pt;
+        line-height: 1.2em;
+        color: var(--dynamic-colour);
+      }
+
+      .feature__container {
+        display: flex;
+        margin-bottom: 20pt;
+        padding-left: 14pt;
+      }
+
+      .feature {
+        display: flex;
+        flex: 1;
+      }
+
+      .feature__item {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 46pt;
+      }
+
+      .feature__item:last-child { margin-right: 0; }
+
+      .feature__icon {
+        width: 43pt;
+        max-height: 38pt;
+        object-fit: contain;
+        margin-bottom: 10pt;
+      }
+
+      .feature__text {
+        font-size: 9pt;
+        font-weight: bold;
+        line-height: 1.2em;
+        text-transform: uppercase;
+      }
+
+      .text {
+        width: 202pt;
+        padding-top: 31pt;
+        font-size: 12.3pt;
+        line-height: 1.2em;
+        font-weight: bold;
+      }
+
+      .copy__container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 7pt;
+      }
+
+      .copy__headingContainer {
+        display: flex;
+        margin-bottom: 11pt;
+      }
+
+      .copy__heading {
+        font-size: 12.3pt;
+        line-height: 1.2em;
+        font-weight: bold;
+      }
+
+      .copy__heading--primary { flex: 1; }
+      .copy__heading--secondary { width: 201pt; }
+
+      .copy {
+        columns: 3;
+        column-gap: 22pt;
+        width: 500pt;
+      }
+
+      .copy li {
+        position: relative;
+        margin-bottom: 7.8pt;
+        padding-left: 18pt;
+        font-size: 12.4pt;
+        line-height: 1.3em;
+        font-weight: bold;
+        letter-spacing: -0.8pt;
+      }
+
+      .copy li:before {
+        content: '\2022';
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 1em;
+      }
+
+      .copy li:last-child { margin-bottom: 0; }
+
+      .price {
+        margin-bottom: 23pt;
+        margin-left: -4pt;
+        font-size: 0;
+      }
+
+      .price__label {
+        margin-bottom: 4.6pt;
+        font-size: 13pt;
+        line-height: 1.2em;
+        font-weight: bold;
+      }
+
+      .price__value {
+        display: inline-block;
+        padding: 1.8pt 0pt;
+        font-size: 31.4pt;
+        font-weight: bold;
+        line-height: 1.2em;
+        border-top: 1.2pt dotted var(--black);
+        border-bottom: 1.2pt dotted var(--black);
+      }
+
+      .agent__container {
+        margin-left: -3pt;
+        font-size: 15pt;
+        line-height: 1.2em;
+      }
+
+      .agent__heading {
+        margin-bottom: 2.6pt;
+        font-size: 13.1pt;
+        line-height: 1.2em;
+        letter-spacing: -0.4pt;
+      }
+
+      .agent {
+        display: flex;
+        line-height: 1.2em;
+      }
+
+      .agent__label {
+        margin-right: 45pt;
+        font-size: 12.6pt;
+        font-weight: bold;
+      }
+
+      .agent__value {
+        font-size: 12pt;
+        line-height: 1.2em;
+      }
+
+      .footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 120pt;
+        padding: 3.4pt 27pt;
+      }
+
+      .terms {
+        margin-right: 145pt;
+        margin-bottom: 11pt;
+        font-size: 7.1pt;
+        line-height: 1.45em;
+      }
+
+      .info { margin-right: 145pt; }
+
+      .info__heading {
+        padding-bottom: 5.8pt;
+        text-align: right;
+        font-size: 17.6pt;
+        line-height: 1.2em;
+        border-bottom: 1pt solid var(--dynamic-colour);
+        color: var(--dynamic-colour);
+      }
+
+      .info__row {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .info__text {
+        font-size: 11.8pt;
+        line-height: 1.2em;
+        color: var(--dynamic-colour);
+      }
+
+      .info__address {
+        font-size: 9.8pt;
+        line-height: 1.2em;
+        color: var(--dynamic-colour);
+      }
+
+      .info__phone { margin-right: 8pt; }
+
+      .logo {        
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        height: 175pt;
+        width: 162pt;
+      }
+
+      /* ANY OTHER STYLES THAT NEED MUSTACHE.JS CAPABILITIES */
+    </style>
+  </head>
+  <body style="background: white" 
+        data-crop="{{show-crop}}" 
+        data-reduce-export-font-size-by-percent="0" 
+        data-reduce-firefox-font-size-by-percent="0" 
+        data-prevent-export-overflow="false">
+    <div class="placeholderMaster" data-opacity="{{ placeholder-opacity-2 }}">
+      <div class="placeholderMaster__item" data-bg="{{ placeholder-image-2 }}"></div>
+    </div><!-- end placeholderMaster -->
+    <div class="page">
+
+      <div class="bleed">
+
+        <div class="container fit">
+
+          <div class="image__container">
+            {{#collection.AV_images--fswc}}
+            {{#block.AV_block-image--fswc}}
+            <div class="image"><div class="reposition-fix">{{{AV_image--fswc}}}</div></div><!--backgroundImage-->
+            {{/block.AV_block-image--fswc}}
+            {{/collection.AV_images--fswc}}
+          </div><!--image__container-->
+          <div class="body">
+            <div class="body__inner" data-max-height="dynamic">
+              <div class="title" data-location-property="fullName"></div><!--title-->
+              <div class="subtitle">Apartment 65</div><!--subtitle-->
+              <div class="feature__container">
+                <div class="feature">
+                  {{#AV_bedroom--fswc}}
+                  <div class="feature__item">
+                    <img class="feature__icon" src="https://files.outfit.io/media_library_items/185496/Aveo-Freedom%2520Sales%2520Window%2520Cards-icon.svg">
+                    <div class="feature__text">{{{AV_bedroom--fswc}}}</div><!--feature__text-->
+                  </div><!--feature__item-->
+                  {{/AV_bedroom--fswc}}
+                  {{#AV_bathroom--fswc}}
+                  <div class="feature__item">
+                    <img class="feature__icon" src="https://files.outfit.io/media_library_items/185495/Aveo-Freedom%2520Sales%2520Window%2520Cards-icon2.svg">
+                    <div class="feature__text">{{{AV_bathroom--fswc}}}</div><!--feature__text-->
+                  </div><!--feature__item-->
+                  {{/AV_bathroom--fswc}}
+                  {{#AV_car--fswc}}
+                  <div class="feature__item">
+                    <img class="feature__icon" src="https://files.outfit.io/media_library_items/185956/Aveo-Freedom%2520Sales%2520Window%2520Cards-car%2520icon.svg">
+                    <div class="feature__text">{{{AV_car--fswc}}}</div><!--feature__text-->
+                  </div><!--feature__item-->
+                  {{/AV_car--fswc}}
+                </div><!--feature-->
+                <div class="text">Total Area: 69m<sup>2</sup></div><!--text-->
+              </div><!--feature__container-->
+              <div class="copy__container">
+                <div class="copy__headingContainer">
+                  <div class="copy__heading copy__heading--primary">Features</div><!--copy__heading-->
+                  <div class="copy__heading copy__heading--secondary">Service Fee: $322,92/week*</div><!--copy__heading-->
+                </div><!--copy__headingContainer-->
+                <div class="copy">{{{AV_features--fswc}}}</div><!--copy-->
+              </div><!--copy__container-->
+              {{#AV_price-points--fswc}}
+              <div class="price">
+                <div class="price__label">Apartment price</div><!--price__label-->
+                <div class="price__value">{{{AV_price-points--fswc}}}</div><!--price__label-->
+              </div><!--price-->
+              {{/AV_price-points--fswc}}
+              <div class="agent__container">
+                <div class="agent__heading">For more information please contact our Sales Consultant</div><!--agent__heading-->
+                <div class="agent">
+                </div><!--agent-->
+              </div><!--agent__container-->
+            </div><!--body__inner-->
+          </div><!--body-->
+          <div class="footer">
+            <div class="terms">This material and all design is copyright and is the property of Aveo Group Limited ABN 28 010 729 950 (Aveo). This material must not be used, reproduced or copied, wholly or in part, without the prior written permission of Aveo. These plans were prepared on 19/3/2019 but design, dimensions, specification and materials are indicative only and are subject to change without notice at anytime and intending purchasers should undertake their own independent inquiries to satisfy themselves regarding the status of these plans. You should refer to appropriate Survey Plans for confirmation of individual unit areas.</div><!--terms-->
+            <div class="info">
+              <div class="info__heading" data-location-property="fullName"></div><!--info__heading-->
+              <div class="info__row">
+                <div class="info__text">
+                  <span class="info__phone" data-location-property="phone"></span>aveo.com.au/<span class="info__website" data-location-property="website"></span>
+                </div><!--info__tex-->
+                <div class="info__address" data-location-property="address"></div><!--info__row-->
+              </div><!--info__row-->
+            </div><!--info-->
+          </div><!--footer-->
+          <img class="logo" src="https://files.outfit.io/media_library_items/185443/Aveo-logo3.png">
+
+        </div><!--container fit-->
+
+      </div><!--bleed-->
+
+    </div><!--page-->
+
+
+    <script>
+      window.showCrop = {{show-crop}}{{^show-crop}}true{{/show-crop}};
+    </script>
+    <script src="js/main.js"></script>   
+    <script src="js/prefixfree.js"></script>
+    <script src="js/placeholder-controller.js"></script>
+    <script src="js/char-limit.js"></script>
+    <script src="js/check-export-mode.js"></script>
+    <script src="js/max-line-check.js"></script>
+    <script src="js/max-height-check.js"></script>
+    <script src="js/hide-empty-titles.js"></script>
+    <script src="js/custom-rich-text.js"></script>
+    <script src="js/dynamic-inject.js"></script>
+    <script src="js/text-fit-min.js"></script>
+    <script src="js/fontfaceobserver.js"></script>
+    <script src="https://outfit-assets-production.s3-accelerate.amazonaws.com/scripts/textfit.0.0.4.min.js" type="text/javascript"></script>
+    <script>
+      {{ #placeholder-toggle-new-2 }}document.body.classList.add("u-placeholder-{{ placeholder-toggle-new-2 }}{{^placeholder-toggle-new-2}}hide{{/placeholder-toggle-new-2}}"); {{ /placeholder-toggle-new-2 }}
+      {{ #placeholder-validation }}document.body.classList.add("placeholder__validation--{{placeholder-validation}}"){{ /placeholder-validation }}
+      {{ #AV_personal-data--bidl }}document.body.classList.add("{{AV_personal-data--bidl}}{{^AV_personal-data--bidl}}trevor{{/AV_personal-data--bidl}}"){{ /AV_personal-data--bidl }}
+    </script>
+    <script>
+
+      console.clear();
+
+      // Tracking text changes and firing text restriction functions (mutationObserver)
+      const overflowObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          maxLineCheck();
+          maxHeightCheck();
+          charLimit();
+          hideEmptyTitles();
+        });
+      });
+
+      const injectObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          injectDynamicContent();
+        });
+      });      
+
+      const injectSources = document.querySelectorAll('[data-target-id]');
+
+      overflowObserver.observe(document.body, {
+        attributes: false,
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: true
+      });
+
+      if ( injectSources.length > 0 ) {
+        injectSources.forEach(src => {
+          injectObserver.observe(src, {
+            attributes: false,
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributeOldValue: false,
+            characterDataOldValue: true
+          });            
+        });
+      }    
+
+      // Calling text size restriction functions once the fonts are loaded
+      // All external font-families need to be added to 'fonts' array
+      document.addEventListener('DOMContentLoaded', function(event) {
+        const fonts = ['Calibri'];
+        const fontObservers = [];
+
+        fonts.forEach(font => {
+          const obs = new FontFaceObserver(font);
+          fontObservers.push(obs.load())
+        });
+
+        Promise.all(fontObservers).then(() => {
+          maxLineCheck();
+          maxHeightCheck();
+          injectDynamicContent();
+          hideEmptyTitles();
+
+          document.dispatchEvent(new Event('printready'));
+        });
+      });      
+
+      function locationControllerSingle() {
+        let location = '{{AV_location-single}}' || 'aveo-newstead';
+        const locationContainers = document.querySelectorAll('[data-location-property]');       
+        const locationsObj = {{{account.snippets.locationsObject}}};
+
+      const { className } = locationsObj[location];
+
+
+      locationContainers.forEach(container => {
+        const locationProperty = container.dataset.locationProperty;        
+        container.innerText = locationsObj[location][locationProperty];
+      });
+
+      document.body.classList.add(`themeChoice--${className}`);
+      }
+
+      locationControllerSingle()
+
+
+      placeholderController();
+      checkCrop();
+      checkExport();
+      charLimit();
+
+      // TextFit function decreases the font of the selected element to make it fit in single line (if needed, uncomment the code bellow)
+      TextFit.fit({
+        selector: '.textFit'
+      });
+
+      function injectData() {
+        const profileInfo = [
+          {
+            "First Name": "Marsden",
+            "Last Name": "Owens",
+            "Mobile": "0436 613 450",
+          },
+          {
+            "First Name": "Trevor",
+            "Last Name": "Ray",
+            "Mobile": "0436 613 450",
+          },
+          {
+            "First Name": "Hayes",
+            "Last Name": "Fulton",
+            "Mobile": "0436 613 450",
+          },
+          {
+            "First Name": "Julian",
+            "Last Name": "Shannon",
+            "Mobile": "0436 613 450",
+          },
+          {
+            "First Name": "Bernie",
+            "Last Name": "Chee",
+            "Mobile": "0436 613 450",
+          }
+        ];
+
+        // Simulation of our mustache choice input
+        const mustacheChoiceInput = '{{{AV_personal-data--bidl}}}{{^AV_personal-data--bidl}}trevor{{/AV_personal-data--bidl}}';
+
+        const agent = document.querySelector('.agent');
+        const activeProfile = setActiveProfile(mustacheChoiceInput);
+        const selectedObj = profileInfo.find(profile => (profile["First Name"] === activeProfile));
+
+        function setActiveProfile(input) {
+          switch(input) {
+            case "marsden":
+              return "Marsden";
+            case "trevor":
+              return "Trevor";
+            case "hayes":
+              return "Hayes";
+            case "julian":
+              return "Julian";   
+            case "bernie":
+              return "Bernie";
+            default:
+              return "Trevor";
+          };  
+        }
+
+        agent.innerHTML = `
+<div class="agent__label">${selectedObj["First Name"]} ${selectedObj["Last Name"]}</div><!--agent__label-->
+<div class="agent__value">${selectedObj["Mobile"]}</div><!--agent__value-->   
+`;
+
+      }
+
+      injectData()
+
+
+    </script>
+
+
+  </body>
+</html>
