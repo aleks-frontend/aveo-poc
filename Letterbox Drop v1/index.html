@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html data-sign="OSM">
+  <head>
+    <title>Template title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/minireset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+    <style>
+      /* Inputs Order
+      {{show-crop}}
+      {{AV_location}}
+      */
+
+      @import url('https://outfit-assets-production.s3.amazonaws.com/fonts/din-pro/stylesheet.css');
+
+      :root {
+        --black: #000;
+        --white: {{{account.colors.white}}};
+        --light-green: #0a9b98;
+        --dark-green: #0c7a71;
+        --header-colour: #0291a1;
+      }
+
+      html {
+        font-family: 'DINPro';
+        font-size: 11pt;
+        color: #000;
+        word-break: break-word;
+      }
+
+      .backgroundImage,
+      .image{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+      }
+
+      .backgroundImage div,
+      .image div {
+        width: auto !important;
+        height: auto !important;
+        right: 0;
+        bottom: 0;
+      }
+
+      /* Helper classes */
+      .u-hide { display: none; }
+
+      /* Helper class for fixing Reposition tool bug */
+      .reposition-fix {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;        
+      }
+
+      .reposition-fix div {
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .fit {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .fit--back { padding: 45pt 50pt 0pt; }
+
+      .badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 135pt;
+        height: 135pt;
+        position: absolute;
+        bottom: 50pt;
+        left: 171pt;
+        padding: 92pt 12pt 17pt 25pt;
+      }
+
+      .badge__icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .badge__text {
+        max-height: 30pt;
+        width: 100%;
+        font-size: 11.2pt;
+        font-weight: bold;
+        transform: rotate(-8deg);
+        text-align: center;
+        text-transform: uppercase;
+        color: var(--white);
+      }
+
+      .badge__text--inner { line-height: 1.2em; }
+
+      .logo {
+        width: 131pt;
+        height: 147pt;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        object-fit: contain;
+      }
+
+      .header {
+        height: 118pt;
+      }
+
+      .image__container { 
+        position: relative;
+        display: flex;
+        height: 100%;
+        margin-left: -9pt;
+      }
+
+      .image { 
+        position: relative;
+        flex: 1;
+        margin-left: 9pt;
+      }
+
+      .body {    
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        position: relative;
+      }
+
+      .body--back {  padding: 14pt 30pt 0; }
+
+      .body__top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        margin-bottom: 12pt;
+      }
+
+      .copy {
+        flex: 1;
+        margin-bottom: 19pt;
+        font-size: 11.4pt;
+        line-height: 1.4em;
+        text-align: center;
+      }
+
+      .copy .tinymce_style--dark { color: var(--dark-green); }
+
+      .copy strong { font-weight: bold; }
+
+      .featureImage { width: 403pt; }
+
+      .body__bottom { 
+        overflow: hidden;
+        padding: 0pt 44pt 0 5pt; 
+      }
+
+      .info__container { display: flex; }
+
+      .info__image {
+        width: 91pt;
+        height: 91pt;
+        object-fit: contain;
+        object-position: left center;
+      }
+
+      .info {
+        margin-left: 9pt;
+        padding-top: 13pt;
+      }
+
+      .info__item {
+        display: flex;
+        margin-bottom: 6pt;
+        font-size: 10.3pt;
+        line-height: 1.2em;
+      }
+
+      .info__item:last-child { margin-bottom: 0; }
+      .info__item:nth-child(2) { margin-bottom: 25pt; }
+
+      .info__item--rsvp {line-height: 1.2em; }
+
+      .info__label {
+        width: 52pt;
+        font-size: 11.8pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: var(--light-green);
+      }
+
+      .info__label--rsvp {
+        width: 38pt;
+        font-size: 12.9pt;
+        text-transform: uppercase;
+        font-weight: normal;
+      }
+
+      .info__value {
+        width: 350px;
+        font-size: 11.6pt;
+        font-weight: bold;
+        color: var(--dark-green);
+      }
+
+      .info__value--rsvp {
+        font-size: 31pt;
+        line-height: 0.7em;
+        font-weight: 900;
+        color: var(--dark-green);
+      }
+
+      .footer {
+        height: 51pt;
+        margin-right: 94pt;
+        border-top: 1px solid var(--light-green);
+      }
+
+      .footer__text {
+        font-size: 11pt;
+        line-height: 1.2em;
+        font-weight: 500;
+        color: var(--light-green)
+      }
+
+      .u-bold { font-weight: 900; }
+      .u-fs-11-1 { font-size: 11.1pt; }
+
+      
+      
+            .title__container {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+              align-items: center;
+              align-items: flex-start;
+              height: 100%;
+              padding: 1rem;
+      }
+
+
+      .pretitle {
+        display: none;
+        position: relative;
+        width: 228pt;
+        height: 54pt;
+        object-fit: contain;
+      }
+
+      .pretitle--primary,
+      .pretitle--secondary {
+        display: block;
+      }
+
+      .pretitle--primary {
+        margin-right: 9pt;
+        width: 138pt;
+        height: 55pt;
+        object-position: top right;
+      }
+
+      
+            .title {
+        position: relative;
+        text-transform: uppercase;
+        text-align: center;
+        font-family: 'DINPro';
+        font-size: 72pt;
+        line-height: 0.85em;
+        font-weight: 900;
+        color: var(--header-colour);
+		top:0;
+        width: 100%;
+      }
+      .title p {
+        position: absolute;
+        width: 100%;
+        top:0;
+        z-index: 2;
+      }
+      
+      .title__stroke {
+        width: 100%;
+        position: absolute;
+        z-index: 0;
+        top:0;
+        left:0;
+        color: var(--header-colour);
+        -webkit-text-fill-color: var(--header-colour);
+         -webkit-text-stroke-width: 0.25rem;
+        -webkit-text-stroke-color: rgba(255,255,255,0.6);
+      }
+      
+      
+      
+      /* ANY OTHER STYLES THAT NEED MUSTACHE.JS CAPABILITIES */
+    </style>
+  </head>
+  <body style="background: white" 
+        data-crop="{{show-crop}}" 
+        data-reduce-export-font-size-by-percent="0" 
+        data-reduce-firefox-font-size-by-percent="0" 
+        data-prevent-export-overflow="false">
+    <div class="page">
+
+      <div class="bleed">
+
+        <div class="container fit fit--front">
+
+          <div class="body body--front">
+            <div class="backgroundImage"><div class="reposition-fix">{{{AV_background-image--ldv1}}}</div></div><!--backgroundImage-->
+                        <div class="title__container">
+                <img src="https://files.outfit.io/media_library_items/185090/Join%2520us%2521Aveo3.svg" class="pretitle pretitle--primary"><!--pretitle--primary-->
+
+                <div class="title" data-max-line="1">
+                  <p>{{{AV_headline--oh}}}</p>
+                  <div class="title__stroke">{{AV_headline--oh}}</div>
+                </div><!--title-->
+              </div><!--title__container-->
+            <div class="badge">
+              <img class="badge__icon" src="https://files.outfit.io/media_library_items/185414/Aveo-badge.png">
+              <div class="badge__text"><div class="badge__text--inner textFit--vert">{{{AV_when--ldv1}}}</div></div><!--badge__text-->
+            </div><!--badge-->
+            <img class="logo" src="https://files.outfit.io/media_library_items/185443/Aveo-logo3.png">
+          </div><!--body-->
+
+        </div><!--container fit-->
+
+      </div><!--bleed-->
+
+    </div><!--page-->
+
+
+    <div class="page">
+
+      <div class="bleed">
+
+        <div class="container fit fit--back">
+
+          <div class="header">
+
+            <div class="image__container">
+              {{#collection.AV_images--ldv1}}
+              {{#block.AV_block-image--ldv1}}
+              <div class="image"><div class="reposition-fix">{{{AV_image--ldv1}}}</div></div><!--backgroundImage-->
+              {{/block.AV_block-image--ldv1}}
+              {{/collection.AV_images--ldv1}}
+            </div><!--image__container-->
+          </div><!--header-->
+          <div class="body body--back">
+            <div class="body__inner" data-max-height="dynamic">
+              <div class="body__top">
+                <div class="copy js-locationController-copy" data-original-input="{{AV_copy--ldv1}}">{{{AV_copy--ldv1}}}</div><!--copy-->
+                <img class="featureImage" src="https://files.outfit.io/media_library_items/184666/Aveo-icons.svg">
+              </div><!--body__top-->
+              <div class="body__bottom">
+                <div class="info__container">
+                  <img class="info__image" src="https://files.outfit.io/media_library_items/184683/Aveo-open-house-logo.png">
+                  <div class="info">
+                    <div class="info__item" data-max-line="1">
+                      {{#AV_when--ldv1}}
+                      <div class="info__label">When:</div><!--info__label-->
+                      <div class="info__value">{{{AV_when--ldv1}}}</div><!--info__value-->
+                      {{/AV_when--ldv1}}
+                    </div><!--info__item-->
+                    <div class="info__item">
+                      <div class="info__label">Where:</div><!--info__label-->
+                      <div class="info__value u-fs-11-1 js-locationController-where">Aveo Springfield, 2 Symphony Way, Springfield Central</div><!--info__value-->
+                    </div><!--info__item-->
+                    <div class="info__item info__item--rsvp">
+                      <div class="info__label info__label--rsvp"><span class="u-bold">rsvp</span><br>call</div><!--info__label--rsvp-->
+                      <div class="info__value info__value--rsvp js-locationController-phone">3022 8188</div><!--info__value--rsvp-->
+                    </div><!--info__item--rsvp-->
+                  </div><!--info-->
+                </div><!--info__container-->
+              </div><!--body__bottom-->
+            </div><!--body__inner-->
+          </div><!--body-->
+          <div class="footer">
+            <div class="footer__text">aveo.com.au</div><!--footer__text-->
+            <img class="logo" src="https://files.outfit.io/media_library_items/185443/Aveo-logo3.png">
+          </div><!--footer-->
+
+        </div><!--container fit-->
+
+      </div><!--bleed-->
+
+    </div><!--page-->
+
+
+    <script>
+      window.showCrop = {{show-crop}}{{^show-crop}}true{{/show-crop}};
+    </script>
+    <script src="js/main.js"></script>   
+    <script src="js/prefixfree.js"></script>
+    <script src="js/char-limit.js"></script>
+    <script src="js/check-export-mode.js"></script>
+    <script src="js/max-line-check.js"></script>
+    <script src="js/max-height-check.js"></script>
+    <script src="js/hide-empty-titles.js"></script>
+    <script src="js/custom-rich-text.js"></script>
+    <script src="js/dynamic-inject.js"></script>
+    <script src="js/text-fit-min.js"></script>
+    <script src="js/fontfaceobserver.js"></script>
+    <script src="https://outfit-assets-production.s3-accelerate.amazonaws.com/scripts/textfit.0.0.4.min.js" type="text/javascript"></script>
+    <script>
+
+      console.clear();
+
+      // Tracking text changes and firing text restriction functions (mutationObserver)
+      const overflowObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          maxLineCheck();
+          maxHeightCheck();
+          charLimit();
+          hideEmptyTitles();
+        });
+      });
+
+      const injectObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          injectDynamicContent();
+        });
+      });      
+
+      const injectSources = document.querySelectorAll('[data-target-id]');
+
+      overflowObserver.observe(document.body, {
+        attributes: false,
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: true
+      });
+
+      if ( injectSources.length > 0 ) {
+        injectSources.forEach(src => {
+          injectObserver.observe(src, {
+            attributes: false,
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributeOldValue: false,
+            characterDataOldValue: true
+          });            
+        });
+      }    
+
+      // Calling text size restriction functions once the fonts are loaded
+      // All external font-families need to be added to 'fonts' array
+      document.addEventListener('DOMContentLoaded', function(event) {
+        const fonts = ['DINPro'];
+        const fontObservers = [];
+
+        fonts.forEach(font => {
+          const obs = new FontFaceObserver(font);
+          fontObservers.push(obs.load())
+        });
+
+        Promise.all(fontObservers).then(() => {
+          maxLineCheck();
+          maxHeightCheck();
+          injectDynamicContent();
+          hideEmptyTitles();
+
+          document.dispatchEvent(new Event('printready'));
+        });
+      });     
+
+      // Logic for inject and replace [community] in 'Copy' input
+      function dataReplace({ replace, container }) {
+        const text = container.innerText.toLowerCase();
+        const html = container.innerHTML;          
+        const lookup = new RegExp(/\[community\]/, 'gi');
+
+        if( text.search(lookup) !== -1 && (replace != "" || replace.length != 0) ) {
+          container.innerHTML = html.split('[community]').join(replace);
+        }
+      }
+
+      function locationPopupInject() {
+        const container = document.querySelector('.container.fit--back');
+        if ( container.querySelector('.alert-popup') === null ) {
+          const popup = document.createElement('div');
+          popup.classList.add('alert-popup');
+          popup.style.cssText = `
+position: absolute;
+display: flex;
+align-items: center;
+justify-content: center;
+top: 50%;
+left: 50%;
+width: 50%;
+min-height: 150px;
+font-size: 0.4rem;
+color: #0a9b98;
+border: 6px solid #0a9b98;
+border-radius: 3px;
+transform: translate(-50%, -50%);
+background: #fff;
+padding: 0.2rem;
+text-align: center;
+z-index: 9999;
+`;
+          popup.innerText = 'Please select max two locations.';
+          container.appendChild(popup);
+          container.classList.add('hasPopup');
+        }       
+      }
+
+      function locationPopupRemove() {
+        const container = document.querySelector('.container.fit');
+        if ( container.querySelector('.alert-popup') !== null ) {
+          const popup = container.querySelector('.alert-popup');
+          container.removeChild(popup);
+          container.classList.remove('hasPopup');
+        }
+      }      
+
+      function locationController() {
+        let locations = [];
+        {{#AV_location}}
+        locations = {{{AV_location}}};
+        {{/AV_location}}
+          {{^AV_location}}
+          locations = ['aveo-newstead'];
+          {{/AV_location}}
+          const copyContainer = document.querySelector('.js-locationController-copy');
+          const whereContainer = document.querySelector('.js-locationController-where');
+          const phoneContainer = document.querySelector('.js-locationController-phone');
+          const locationsObj = {{{account.snippets.locationsObject}}};
+
+          if ( locations.length > 2 ) {
+            locationPopupInject();
+            return;
+          } else {
+            locationPopupRemove();
+          }
+
+          if ( locations.lenth === 0 ) return;
+
+          const location1 = locationsObj[locations[0]];
+          const location2 = locationsObj[locations[1]];
+
+          const copyReplace = locations.length === 1 ? `${location1['fullName']}` : `${location1['fullName']} and ${location2['fullName']}`;
+
+          setInterval(() => {
+            dataReplace({ replace: copyReplace, container: copyContainer });
+          }, 1000);
+
+          phoneContainer.innerText = locationsObj[locations[0]]['phone'];
+
+          if ( locations.length === 2 ) {
+            whereContainer.innerHTML = `
+<div class="textFit">${locationsObj[locations[0]]['fullName']}, ${locationsObj[locations[0]]['address']}</div>
+<div class="textFit">${locationsObj[locations[1]]['fullName']}, ${locationsObj[locations[1]]['address']}</div>
+`;
+          } else {
+            whereContainer.innerHTML = `<div class="textFit">${locationsObj[locations[0]]['fullName']}, ${locationsObj[locations[0]]['address']}</div>`;
+          }
+          maxHeightCheck();
+         }
+
+         locationController();
+         maxLineCheck();
+         maxHeightCheck();
+
+         checkCrop();
+         checkExport();
+         charLimit();
+         
+         const images = document.querySelectorAll('img');
+         images.forEach(img => {
+           img.onload = () => {
+             maxHeightCheck();
+             console.log('image loaded');
+           }
+         })
+
+         // TextFit function decreases the font of the selected element to make it fit in single line (if needed, uncomment the code bellow)
+         TextFit.fit({
+           selector: '.textFit'
+         });
+
+         TextFit.fit({
+           selector: '.textFit--vert',
+           fitMode: 'vertical',
+           alignItems: 'flex-start'
+         });
+
+
+
+
+    </script>
+
+
+  </body>
+</html>
