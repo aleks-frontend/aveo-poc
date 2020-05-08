@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html data-sign="OSM">
+  <head>
+    <title>Template title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/minireset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+    <style>
+      /* Inputs Order
+      {{show-crop}}
+      {{AV_location-single}}
+      */
+
+      @import url('https://outfit-assets-production.s3.amazonaws.com/fonts/din-pro/stylesheet.css');
+      @import url('https://outfit-assets-production.s3.amazonaws.com/fonts/AIAltis/stylesheet.css');
+
+      :root {
+        --white: {{{account.colors.white}}};
+        --grey: #4a4b4d;
+        --red: #9d0046;
+        --aveo-corporate-blue: #008b9e;
+        --aveo-light-green: #0f9898;
+        --aveo-dark-green: #26635f;
+
+        --the-clayfield: {{{account.colors.the-clayfield}}};
+        --aveo-newstead: {{{account.colors.aveo-newstead}}};
+        --aveo-springfield: {{{account.colors.aveo-springfield}}};
+        --aveo-bella-vista: {{{account.colors.aveo-bella-vista}}};
+
+        --dynamic-colour: var(--the-clayfield);             
+      }
+
+      .themeChoice--the-clayfield {
+        --dynamic-colour: var(--the-clayfield);
+      }
+
+      /* We are setting custom color and pattern cause we are missing those for the Carindale in the brand guide  */
+      .themeChoice--aveo-carindale {
+        --dynamic-colour: var(--aveo-springfield);
+      }
+
+      .themeChoice--aveo-bella-vista {
+        --dynamic-colour: var(--aveo-bella-vista);
+      }
+
+      .themeChoice--aveo-newstead {
+        --dynamic-colour: var(--aveo-newstead);
+      }
+
+      html {
+        font-family: 'DINPro';
+        font-size: 11pt;
+        color: var(--grey);
+        word-break: break-word;
+      }
+
+      .backgroundImage {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+      }
+
+      .backgroundImage div {
+        width: auto !important;
+        height: auto !important;
+        right: 0;
+        bottom: 0;
+      }
+
+      /* Helper classes */
+      .u-hide { display: none; }
+
+      /* Helper class for fixing Reposition tool bug */
+      .reposition-fix {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;        
+      }
+
+      .reposition-fix div {
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .fit {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .hero {
+        position: relative;
+        height: 7.37rem;
+      }
+
+      .hero__image {}
+
+      .badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 4.17rem;
+        height: 4.17rem;
+        position: absolute;
+        top: 1.05rem;
+        left: 1.09rem;
+        padding: 0.41rem;
+        transform: rotate(-10deg);
+      }
+
+      .badge__icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .badge__text {
+        position: relative;
+        justify-content: center;
+        font-size: 0.51rem;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 1.5em;
+        color: var(--white);
+      }
+
+      .badge__text--top {
+        position: relative;
+        width: 3.39rem;
+        font-size: 0.51rem;
+      }
+
+      .badge__text--top:after {
+        content: '';
+        position: absolute;
+        width: 2.67rem;
+        height: 1pt;
+        display: block;
+        left: 50%;
+        bottom: -2pt;
+        transform: translateX(-50%);
+        background-color: var(--white);
+      }
+
+      .badge__text--bottom {
+        /*border-top: 1pt solid var(--white);*/
+      }
+
+      .body {
+        position: relative;
+        flex: 1;
+        padding: 1.37rem 2.07rem 0.26rem 2.07rem;
+        text-align: center;
+      }
+
+      .title__container {
+        position: absolute;
+        bottom: -0.93rem;
+        left: 50%;
+        height: 2.37rem;
+        padding: 0.3rem;
+        text-align: center;
+        transform: translateX(-50%);
+        background: var(--dynamic-colour);
+      }
+
+      .themeChoice--the-clayfield .title__container { width: 18.1rem; }
+      .themeChoice--aveo-carindale .title__container { width: 14.5rem; }
+      .themeChoice--aveo-bella-vista .title__container { width: 8.9rem; }
+      .themeChoice--aveo-newstead .title__container { width: 13rem; }
+
+      .title {
+        padding: 0.11rem 0.39rem 0.34rem;
+        font-family: 'Ai Altis';
+        font-size: 1rem;
+        line-height: 1.2em;
+        color: var(--white);
+        border: 1.5pt solid var(--white);
+      }
+
+      .copy {
+        margin-bottom: 0.30rem;
+        font-size: 0.39rem;
+        line-height: 1.25em;
+      }
+
+      .offer {
+        margin-bottom: 0.23rem;
+        font-size: 0.47rem;
+        line-height: 1.2em;
+        font-weight: bold;
+        color: var(--dynamic-colour);
+      }
+
+      .blurb {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        font-size: 0.45rem;
+        line-height: 1.2em;
+        font-weight: bold;
+        color: var(--red);
+      }
+
+      .blurb__icon {
+        width: 0.83rem;
+        height: 0.58rem;
+        margin-right: 0.12rem;
+        object-fit: contain;
+      }
+      
+      .blurb__phone {
+        margin: 0 0.1rem;
+      }
+
+      .footer {
+        display: flex;
+        align-items: flex-end;
+        height: 1.5rem;
+        padding: 0 0.79rem 0.75rem 0.68rem;
+      }
+
+      .info__container { flex: 1; }
+
+      .info {
+        display: flex;
+        font-size: 0.45rem;
+        line-height: 1.2em;
+      }
+
+      .info__item {
+        padding-right: 0.17rem;
+        padding-left: 0.23rem;
+        font-size: 0.36rem;
+        line-height: 1.2em;
+        line-height: 1.2em;
+        border-right: 1pt solid var(--grey);
+      }
+
+      .info__item--title {
+        font-size: 0.42rem;
+        line-height: 0.9em;
+        font-weight: bold;
+        color: var(--dynamic-colour);
+      }
+
+      .info__item:first-child { padding-left: 0; }
+
+      .info__item:nth-child(2) { border-right: 1.5pt solid var(--grey); }
+
+      .info__item:last-child { border: none; }
+
+      .terms {    
+        margin-top: 0.15rem;
+        font-size: 0.24rem;
+        line-height: 1.2em;
+      }
+
+      .logo__container { 
+        position: relative;
+        margin-left: 50pt; 
+      }
+
+      .logo__text {
+        margin-right: 2.86rem;
+        font-size: 0.57rem;
+        line-height: 1.2em;
+        font-weight: 500;
+      }
+
+      .logo {
+        position: absolute;
+        bottom: -0.1rem;
+        right: 0;
+        height: 1.8rem;
+        width: 2.58rem;
+        object-fit: contain;
+      }
+
+      .u-bold { font-weight: bold; }
+
+
+
+      /* ANY OTHER STYLES THAT NEED MUSTACHE.JS CAPABILITIES */
+    </style>
+  </head>
+  <body style="background: white" 
+        data-crop="{{show-crop}}" 
+        data-reduce-export-font-size-by-percent="0" 
+        data-reduce-firefox-font-size-by-percent="0" 
+        data-prevent-export-overflow="false"
+  >
+    <div class="page">
+
+      <div class="bleed">
+
+        <div class="container fit">
+
+          <div class="hero">
+            <div class="hero__image"><div class="reposition-fix">{{{AV_hero--bt}}}</div></div><!--hero__image-->
+            <div class="badge">
+              <img class="badge__icon" src="https://files.outfit.io/media_library_items/185474/Aveo-Book%2520a%2520tour-badge.svg">
+              <div class="badge__text">
+                {{#AV_book-a-tour--bt}}
+                <div class="badge__text--top"><div class="badge__text--inner textFit" style="line-height: 1.2em;">From $<span class="js-badge-tour-number-container"></span></div></div><!--badge__text--top-->
+                {{/AV_book-a-tour--bt}}
+                <div class="badge__text--bottom">book a tour</div><!--badge__text--bottom-->
+              </div><!--badge__text-->
+            </div><!--badge-->
+            <div class="title__container">
+              <div class="title" data-location-property="cta">Live well in the heart of it all</div><!--title-->
+            </div><!--title__container-->
+          </div><!--hero-->
+          <div class="body">
+            <div class="body__inner" data-max-height="dynamic">
+
+              <div class="copy js-locationController-copy">{{{AV_body-copy--bt}}}</div><!--copy-->
+              <div class="offer" data-max-line="1">New apartments selling from ${{{AV_book-a-tour--bt}}}</div><!--offer-->
+              <div class="blurb__container">
+                <div class="blurb">Shopping at Westfield Carindale this holiday season? We’re open!</div><!--blurb-->
+                <div class="blurb"><img class="blurb__icon" src="https://files.outfit.io/media_library_items/185475/Aveo-Book%2520a%2520tour-icon.svg">
+                  Book in a tour of the community before or after. Call <span class="blurb__phone" data-location-property="phone"></span> to book today!</div><!--blurb__icon-->
+              </div><!--blurb__container-->
+            </div><!--body__inner-->
+          </div><!--body-->
+          <div class="footer">
+            <div class="info__container">
+              <div class="info">
+                <div class="info__item info__item--title" data-location-property="fullName"></div><!--info__item--title-->
+                <div class="info__item" data-location-property="address">19 Banchory Court, Carindale</div><!--info__item-->
+                <div class="info__item ">aveo.com.au/<span data-location-property="website"></span></div><!--info__item-->
+              </div><!--info-->
+              {{#AV_terms-conditions--bt}}
+              <div class="terms" data-max-line="1">{{{AV_terms-conditions--bt}}}</div><!--terms-->
+              {{/AV_terms-conditions--bt}}
+            </div><!--info__container-->
+            <div class="logo__container">
+              <div class="logo__text" data-location-property="lockup"></div><!--logo__text-->
+              <img class="logo" src="https://files.outfit.io/media_library_items/185516/Aveo-LBD-DLX-Logo%2520black.svg">
+            </div><!--logo__container-->
+          </div><!--footer-->
+
+        </div><!--container fit-->
+
+      </div><!--bleed-->
+
+    </div><!--page-->
+
+
+    <script>
+      window.showCrop = {{show-crop}}{{^show-crop}}true{{/show-crop}};
+    </script>
+    <script src="js/main.js"></script>   
+    <script src="js/prefixfree.js"></script>
+    <script src="js/char-limit.js"></script>
+    <script src="js/check-export-mode.js"></script>
+    <script src="js/max-line-check.js"></script>
+    <script src="js/max-height-check.js"></script>
+    <script src="js/hide-empty-titles.js"></script>
+    <script src="js/custom-rich-text.js"></script>
+    <script src="js/dynamic-inject.js"></script>
+    <script src="js/text-fit-min.js"></script>
+    <script src="js/fontfaceobserver.js"></script>
+    <script src="https://outfit-assets-production.s3-accelerate.amazonaws.com/scripts/textfit.0.0.4.min.js" type="text/javascript"></script>
+    <script>
+
+      console.clear();
+
+      // Tracking text changes and firing text restriction functions (mutationObserver)
+      const overflowObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          maxLineCheck();
+          maxHeightCheck();
+          charLimit();
+          hideEmptyTitles();
+        });
+      });
+
+      const injectObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          injectDynamicContent();
+        });
+      });      
+
+      const injectSources = document.querySelectorAll('[data-target-id]');
+
+      overflowObserver.observe(document.body, {
+        attributes: false,
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: true
+      });
+
+      if ( injectSources.length > 0 ) {
+        injectSources.forEach(src => {
+          injectObserver.observe(src, {
+            attributes: false,
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributeOldValue: false,
+            characterDataOldValue: true
+          });            
+        });
+      }    
+
+      function badgeTourNumberController() {
+        const badgeTourNumberContainer = document.querySelector('.js-badge-tour-number-container');
+        const badgeTourNumber = '{{{AV_book-a-tour--bt}}}';
+        
+        if ( badgeTourNumber < 1000 ) {
+          badgeTourNumberContainer.innerText = badgeTourNumber;   
+        } else if ( badgeTourNumber > 999 && badgeTourNumber < 1000000 ) {
+          badgeTourNumberContainer.innerText = `${Math.floor(badgeTourNumber / 1000)}K`;
+        } else {
+          badgeTourNumberContainer.innerText = `${Math.floor(badgeTourNumber / 1000000)}M`
+        }
+       
+      }
+
+      badgeTourNumberController();
+
+      // Calling text size restriction functions once the fonts are loaded
+      // All external font-families need to be added to 'fonts' array
+      document.addEventListener('DOMContentLoaded', function(event) {
+        const fonts = ['DINPro'];
+        const fontObservers = [];
+
+        fonts.forEach(font => {
+          const obs = new FontFaceObserver(font);
+          fontObservers.push(obs.load())
+        });
+
+        Promise.all(fontObservers).then(() => {
+          maxLineCheck();
+          maxHeightCheck();
+          injectDynamicContent();
+          hideEmptyTitles();
+
+          document.dispatchEvent(new Event('printready'));
+        });
+      });  
+
+      // Logic for inject and replace [community] in 'Copy' input
+      function dataReplace({ replace, container }) {
+        const text = container.innerText.toLowerCase();
+        const html = container.innerHTML;          
+        const lookup = new RegExp(/\[community\]/, 'gi');
+
+        if( text.search(lookup) !== -1 && (replace != "" || replace.length != 0) ) {
+          container.innerHTML = html.split('[community]').join(replace);
+        }
+      }  
+
+      function locationControllerSingle() {
+        let location = '{{AV_location-single}}' || 'aveo-newstead';
+        const locationContainers = document.querySelectorAll('[data-location-property]');
+        const copyContainer = document.querySelector('.js-locationController-copy');        
+        const locationsObj = {{{account.snippets.locationsObject}}};
+
+        const { fullName, className } = locationsObj[location];
+
+        setInterval(() => {
+          dataReplace({ replace: fullName, container: copyContainer });
+        }, 1000);
+      
+        locationContainers.forEach(container => {
+          const locationProperty = container.dataset.locationProperty;        
+          container.innerText = locationsObj[location][locationProperty];
+        });
+
+        document.body.classList.add(`themeChoice--${className}`);
+      }
+
+      locationControllerSingle();
+      checkCrop();
+      checkExport();
+      charLimit();
+
+      // TextFit function decreases the font of the selected element to make it fit in single line (if needed, uncomment the code bellow)
+      TextFit.fit({
+        selector: '.textFit'
+      });
+
+
+
+    </script>
+
+
+  </body>
+</html>
